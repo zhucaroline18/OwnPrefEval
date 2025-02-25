@@ -8,7 +8,7 @@
 
 
 <p align="center">
-  <img src="https://github.com/siyan-zhao/preferencebench/blob/main/prefeval.png" alt="mainfigure" width="760">
+  <img src="https://github.com/amazon-science/PrefEval/blob/main/prefeval.png" alt="mainfigure" width="760">
 </p>
 
 ---
