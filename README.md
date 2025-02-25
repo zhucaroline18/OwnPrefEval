@@ -3,7 +3,7 @@
 
 
 <p align="center">
-| <a href="https://prefeval.github.io/"><b>Website</b></a> | <a href="TBA"><b>Paper</b></a> | <a href="https://huggingface.co/datasets/TBA"><b>Data</b></a> |
+| <a href="https://prefeval.github.io/"><b>Website</b></a> | <a href="https://arxiv.org/abs/2502.09597"><b>Paper</b></a> | <a href="https://huggingface.co/datasets/siyanzhao/prefeval_explicit"><b>Data</b></a> |
 </p>
 
 
