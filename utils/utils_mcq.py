@@ -91,7 +91,7 @@ def extract_choice_mistral(response):
     return None
 
 
-def shuffle_options(options, seed=41):
+def shuffle_options(options):
     """
     Note: In the MCQ datasets, the first choice in the JSON file is the correct answer.
     This function shuffles the options randomly while keeping track of the correct answer.
@@ -99,8 +99,6 @@ def shuffle_options(options, seed=41):
     :param options: List of options where the first option is the correct answer
     :return: Tuple containing the shuffled options and the index of the correct answer
     """
-    if seed is not None:
-        random.seed(seed)
     correct_answer = options[0]
     shuffled_options = random.sample(options, len(options))
     correct_index = shuffled_options.index(correct_answer)
