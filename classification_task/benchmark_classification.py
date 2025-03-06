@@ -65,7 +65,7 @@ def main():
     args.dir = exp_configs["dir_path"]
     system_prompt = exp_configs["system_prompt"]
     max_tokens = exp_configs["max_mcq_tokens"]
-
+    random.seed(41)
     # Load necessary data
     turns_data = load_turns_data(args)
     with open(f"{args.dir}/benchmark_dataset/mcq_options/{args.topic}.json", "r") as infile:
