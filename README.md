@@ -15,7 +15,7 @@
 
 ### 🏆Performance Leaderboard on Subset Tasks🏆
 *Ranked by performance in the Reminder (10 Turns) column.* 
-This table presents the performance results for the topic: Travel-Restaurants.
+This table presents the performance results for the topic: Travel-Restaurants. (With explicit preference and generation task)
 
 | Model              | Zero-shot (10 Turns) | **Reminder (10 Turns)** | Zero-shot (300 Turns) | Reminder (300 Turns) |
 |--------------------|----------------------|-------------------------|-----------------------|----------------------|
