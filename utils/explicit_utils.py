@@ -121,6 +121,13 @@ def create_user_pref_message(preference, model_type, system_prompt):
         }
         # user_message = [system_prompt, user_message]
         user_message = [user_message]
+    elif model_type == "gemini":
+        return {
+            "system_instruction": system_prompt,
+            "messages": [
+                {"role": "user", "parts": [{"text": preference}]},
+            ],
+        }
     else:
         raise ValueError(f"Invalid model type: {model_type}")
 
@@ -198,6 +205,16 @@ def get_question_prompt(
             assert turn_number > 0
             messages.extend(multi_inter_message)
         messages.append({"role": "user", "content": question})
+    elif model_type == "gemini":
+        msgs = [
+            {"role": "user", "parts": [{"text": preference}]},
+            {"role": "model", "parts": [{"text": pref_generation}]},
+        ]
+        if multi_inter_message:
+            msgs.extend(multi_inter_message)
+        msgs.append({"role": "user", "parts": [{"text": question}]})
+
+        return {"system_instruction": system_prompt, "messages": msgs}
     else:
         raise ValueError(f"Invalid model type: {model_type}")
 
