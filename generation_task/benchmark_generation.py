@@ -8,7 +8,13 @@ from tqdm import tqdm
 from botocore.exceptions import ClientError
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from utils.common_utils import generate_message, get_model_info, extract_multi_turn_message, load_config, count_tokens
+from utils.common_utils import (
+    generate_message,
+    get_model_info,
+    extract_multi_turn_message,
+    load_config,
+    count_tokens,
+)
 from utils.explicit_utils import (
     load_files_explicit,
     create_user_pref_message,
@@ -47,7 +53,9 @@ def main():
 
     # Parse arguments
     parser = argparse.ArgumentParser(description="Run benchmarks for various tasks.")
-    parser.add_argument("--inter_turns", type=int, default=5, help="Number of inter turns conversations to insert.")
+    parser.add_argument(
+        "--inter_turns", type=int, default=5, help="Number of inter turns conversations to insert."
+    )
     parser.add_argument("--topk", type=int, default=5, help="Number of turns to extract for RAG")
     parser.add_argument("--model", type=str, default="claude3hk")
     parser.add_argument("--topic", type=str, default="travel_restaurant")
@@ -145,7 +153,9 @@ def main():
                         task_id=task_id,
                         multi_turn_message=multi_turn_message,
                     )
-                end_generation = generate_message(client, model_id, model_type, system_prompt, messages, max_tokens)
+                end_generation = generate_message(
+                    client, model_id, model_type, system_prompt, messages, max_tokens
+                )
             elif args.task == "selfcritic":
                 if args.pref_form == "explicit":
                     zero_shot_response, revised_messages, critic = handle_selfcritic_task(
@@ -198,7 +208,9 @@ def main():
                         cot=args.task == "cot",
                         max_tokens=max_tokens,
                     )
-                end_generation = generate_message(client, model_id, model_type, system_prompt, messages, max_tokens)
+                end_generation = generate_message(
+                    client, model_id, model_type, system_prompt, messages, max_tokens
+                )
 
             if args.task == "selfcritic":
                 if args.pref_form == "explicit":

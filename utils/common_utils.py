@@ -3,6 +3,9 @@ import json
 import time
 import yaml
 import tiktoken
+from openai import OpenAI
+from google import genai
+from google.genai import types
 
 
 def count_tokens(text):
@@ -88,16 +91,27 @@ def generate_message(
                 response_text = model_response["generation"]
                 return response_text
             elif model_type == "gpt":
-                print(model_id)
-                completion = bedrock_runtime.chat.completions.create(
+                client = OpenAI()  # Use the client passed or create a new one
+                completion = client.chat.completions.create(
                     model=model_id,
                     messages=messages,
                     # temperature=temperature,
                     # max_tokens=max_tokens,
-                    # max_completion_tokens=max_tokens,
                 )
-                print(completion)
                 return completion.choices[0].message.content
+            elif model_type == "gemini":
+                client = genai.Client(api_key=os.getenv("GENAI_API_KEY"))
+                config = types.GenerateContentConfig(
+                    system_instruction=messages["system_instruction"],
+                    # max_output_tokens=max_tokens,
+                    # temperature=temperature,
+                )
+                response = client.models.generate_content(
+                    model=model_id,
+                    contents=messages["messages"],
+                    config=config,
+                )
+                return response.text
             else:
                 raise ValueError(f"Invalid model_type: {model_type}")
 
@@ -129,6 +143,11 @@ def extract_multi_turn_conversation(multi_turn_message, turn_number=3, model_typ
                 message.append(f"{content}</s>")
         elif model_type == "gpt":
             message.append({"role": role, "content": content})
+        elif model_type == "gemini":
+            gemini_role = {"user": "user", "assistant": "model"}.get(role, "user")
+            message.append({"role": gemini_role, "parts": [{"text": str(content)}]})
+        else:
+            raise ValueError(f"Invalid model_type: {model_type}")
         if len(message) == turn_number * 2:
             if role != "assistant":
                 raise ValueError("The last turn must be from assistant")
@@ -198,13 +217,27 @@ def get_model_info(model_name):
         model_id = "gpt-4o-mini"
     elif model_name == "gpt-o1":
         model_id = "o1-preview-2024-09-12"
+    elif model_name == "gpt-o3":
+        model_id = "o3-2025-04-16"
+    elif model_name == "gpt-o4-mini":
+        model_id = "o4-mini-2025-04-16"
+    elif model_name == "gemini2.5-flash":
+        model_id = "gemini-2.5-flash-preview-04-17"
+    elif model_name == "gemini2.5-pro":
+        model_id = "gemini-2.5-pro-exp-03-25"
+
+    # Fixed model_type detection to include gemini
     model_type = (
         "mistral"
         if "mistral" in model_name
         else (
             "claude"
             if "claude" in model_name
-            else "llama" if "llama" in model_name else "gpt" if "gpt" in model_name else None
+            else (
+                "llama"
+                if "llama" in model_name
+                else "gpt" if "gpt" in model_name else "gemini" if "gemini" in model_name else None
+            )
         )
     )
     return model_id, model_type
